@@ -3,12 +3,13 @@ pipeline {
 
     environment {
         DOCKER_IMAGE = 'rahu01lsharma/my-node-app'
+        DOCKERHUB_CREDENTIALS = 'd9976159-49b4-4269-aa50-a8898debdd95' // id of your DockerHub Credentials
     }
 
     stages {
         stage('Clone repository') {
             steps {
-                git branch:'main', url:'https://github.com/rahulSh83/my-node-app.git'
+                git branch: 'main', url: 'https://github.com/rahulSh83/my-node-app.git'
             }
         }
 
@@ -22,16 +23,11 @@ pipeline {
 
         stage('Push to Docker Hub') {
             steps {
-              withCredentials([usernamePassword(
-                credentialsId:'d9976159-49b4-4269-aa50-a8898debdd95',
-                usernameVariable:'DOCKER_USER',
-                passwordVariable:'DOCKER_PASS'
-                )]){
                 script {
-                    docker.withRegistry('https://index.docker.io/v1/', "${DOCKER_USER}:${DOCKER_PASS}") {
+                    docker.withRegistry('https://index.docker.io/v1/', DOCKERHUB_CREDENTIALS) {
                         docker.image(DOCKER_IMAGE).push('latest')
                     }
-                }}
+                }
             }
         }
     }
