@@ -31,7 +31,7 @@ pipeline {
                     docker.withRegistry('https://index.docker.io/v1/', 'd9976159-49b4-4269-aa50-a8898debdd95') {
                         docker.image(DOCKER_IMAGE).push('latest')
                     }
-                }
+                }}
             }
         }
     }
